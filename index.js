@@ -6,7 +6,7 @@ import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 
 const argv = yargs(hideBin(process.argv))
-    .usage('Usage: $0 --mode [mode] --input [file]')
+    .usage('Usage: $0 --mode [mode] --input [file] --outdir [directory]')
     .option('mode', {
         alias: 'm',
         describe: 'Compression mode',
@@ -18,6 +18,12 @@ const argv = yargs(hideBin(process.argv))
         describe: 'Input HTML file path',
         type: 'string',
         demandOption: true
+    })
+    .option('outdir', {
+        alias: 'o',
+        describe: 'Output directory path',
+        type: 'string',
+        default: 'out'
     })
     .help()
     .argv;
@@ -43,7 +49,7 @@ const generateDataUri = (htmlContent) => {
 async function generateQr(fp) {
     const filePath = path.resolve(fp);
     try {
-        const outDir = path.resolve('out');
+        const outDir = path.resolve(argv.outdir);
         if (!fs.existsSync(outDir)) {
             fs.mkdirSync(outDir);
         }
